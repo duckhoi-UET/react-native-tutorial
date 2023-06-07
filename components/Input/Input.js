@@ -2,7 +2,7 @@ import React from "react";
 import { SafeAreaView, StyleSheet, TextInput } from "react-native";
 
 const TextInputExample = () => {
-  const [username, onChangeText] = React.useState("Useless Text");
+  const [username, onChangeText] = React.useState("");
   const [password, onChangeNumber] = React.useState("");
 
   return (
@@ -29,8 +29,6 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
-    borderColor: "#fff",
-    color: "#fff",
   },
 });
 
