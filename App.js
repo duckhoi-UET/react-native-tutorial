@@ -1,25 +1,50 @@
-import { StyleSheet, Text, View } from "react-native";
-// import TextInputExample from "./components/Input/Input.js";
-// import ButtonExample from "./components/Button/Button.js";
+import { StyleSheet, Text, View, ScrollView, Alert } from "react-native";
+import Task from "./components/Task";
+import Form from "./components/Form";
+import { colors } from "./constants/styles";
+import React, { useState } from "react";
 
 export default function App() {
+  const [tasks, setTasks] = useState([]);
+  const handleAddTask = (task) => {
+    setTasks([...tasks, task]);
+  };
+
+  const onDeleteTask = (index, item) => {
+    Alert.alert("Xác nhận xóa", `Xóa công việc ${item}`, [
+      {
+        text: "Hủy",
+        onPress: () => {},
+        style: "cancel",
+      },
+      { text: "Xóa", onPress: () => handleDeleteTask(index) },
+    ]);
+  };
+
+  const handleDeleteTask = (index) => {
+    const tasksTemp = [...tasks];
+    tasksTemp.splice(index, 1);
+    setTasks(tasksTemp);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.containerTop}>
-        <View style={styles.top}>
-          <Text style={styles.textTop}>Top left</Text>
-        </View>
+      <View style={styles.body}>
+        <Text style={styles.header}>Todo List</Text>
+        <ScrollView>
+          {tasks.map((item, index) => {
+            return (
+              <Task
+                key={index}
+                title={item}
+                number={index + 1}
+                onDeleteTask={() => onDeleteTask(index, item)}
+              />
+            );
+          })}
+        </ScrollView>
       </View>
-      <View style={styles.containerCenter}>
-        <View style={styles.center}>
-          <Text>Bottom right</Text>
-        </View>
-      </View>
-      <View style={styles.containerBottom}>
-        <View style={styles.bottom}>
-          <Text style={styles.textBottom}>Bottom right</Text>
-        </View>
-      </View>
+      <Form onAddTask={handleAddTask} />
     </View>
   );
 }
@@ -27,57 +52,18 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#e7feff",
+    backgroundColor: colors.backgroundColor,
+    paddingHorizontal: 20,
+    paddingVertical: 50,
   },
-
-  containerTop: {
+  body: {
     flex: 1,
+    marginBottom: 20,
   },
-
-  containerCenter: {
-    flex: 3,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  containerBottom: {
-    flex: 1,
-  },
-
-  top: {
-    marginTop: 60,
-    marginHorizontal: 20,
-    backgroundColor: "#fff",
-    paddingHorizontal: 10,
-    paddingVertical: 20,
-    borderWidth: 2,
-    borderColor: "red",
-    borderRadius: 4,
-  },
-  textTop: {
+  header: {
+    fontSize: 32,
     fontWeight: 500,
-    fontSize: 20,
-  },
-  center: {
-    width: 150,
-    height: 150,
-    backgroundColor: "green",
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  bottom: {
-    marginTop: 60,
-    marginHorizontal: 20,
-    backgroundColor: "#7ee6fd",
-    paddingHorizontal: 10,
-    paddingVertical: 20,
-    borderRadius: 18,
-  },
-  textBottom: {
-    fontWeight: "bold",
-    fontSize: 20,
-    textAlign: "right",
-    color: "#fff",
+    color: colors.primary,
+    marginBottom: 20,
   },
 });
